@@ -12,7 +12,7 @@ const config = {
 const game = new Chess();
 const board = Chessboard('myBoard', config);
 const $searchDepth = $('#searchDepth');
-
+const moveSound = new Audio("https://images.chesscomfiles.com/chess-themes/sounds/_MP3_/default/move-self.mp3");
 function newGame() {
 	game.reset();
 	board.start();
@@ -116,7 +116,7 @@ function onDrop(source, target) {
 	const move = game.move({ from: source, to: target, promotion: 'q' });
 
 	if (move === null) return 'snapback';
-
+	moveSound.play();
 	setTimeout(makeBestMove, 250);
 }
 
@@ -126,6 +126,7 @@ function makeBestMove() {
 	const depth = +$searchDepth.prop('value');
 	const bestMove = minimaxRoot(game, depth, true);
 	game.move(bestMove);
+	moveSound.play();
 	board.position(game.fen());
 
 	if (game.game_over()) alert('Checkmate!');
